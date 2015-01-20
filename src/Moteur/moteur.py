@@ -11,7 +11,7 @@ class Moteur:
         self.players.append(JoueurH())
 
         if modeGame == "PvP":
-            self.players.append(Joueur())
+            self.players.append(JoueurH())
         if modeGame == "PvE":
             self.players.append(JoueurIA())
 
