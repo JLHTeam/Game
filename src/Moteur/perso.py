@@ -1,16 +1,16 @@
 import sys
 ##from PyQt4.QtCore import *
 ##from PyQt4.QtGui import *
-from PyQt4 import QtCore, QtGui
+##from PyQt4 import QtCore, QtGui
 #http://openclassrooms.com/forum/sujet/pyqt-evenements-clavier-81893
 
 
 class Joueur:
     def __init__(self):
-        self.g = 1
-        self.d = 2
-        self.h = None
-        self.b = None
+        self.gauche = 1
+        self.droite = 2
+        self.haut = None
+        self.bas = None
         #self.event = []
         super().__init__()
 
@@ -29,21 +29,20 @@ class Joueur:
 class Avatar:
     def __init__(self):
         super().__init__()
-        self.posX=1
-        self.posY=1
+        self.positionX=1
+        self.positionY=1
 
     def deplacer(self):
         Joueur1 = Joueur()
-        print(Joueur1.commande())
-        print(Joueur1.g)
-        if Joueur1.commande() == Joueur1.g:
-            self.posX -= 1
-        if Joueur1.commande() == Joueur1.d:
-            self.posX += 1
-        if Joueur1.commande() == Joueur1.h:
-            self.posY -= 1
-        if Joueur1.commande() == Joueur1.b:
-            self.posY += 1
+        commande = Joueur1.commande()
+        if commande== Joueur1.gauche:
+            self.positionX -= 1
+        if commande == Joueur1.droite:
+            self.positionX += 1
+        if commande == Joueur1.haut:
+            self.positionY -= 1
+        if commande == Joueur1.bas:
+            self.positionY += 1
 
     def poserBombe(self):
         pass
@@ -51,7 +50,7 @@ class Avatar:
 def main():
     avatar = Avatar()
     avatar.deplacer()
-    print(avatar.posX)
+    print(avatar.positionX)
 
 if __name__ == '__main__':
     main()
