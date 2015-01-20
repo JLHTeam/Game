@@ -9,48 +9,62 @@ class Joueur:
     def __init__(self):
         self.gauche = 1
         self.droite = 2
-        self.haut = None
-        self.bas = None
-        #self.event = []
-        super().__init__()
+        self.haut = 3
+        self.bas = 4
+        self.positionX = 1
+        self.positionY = 1
+        self.vie = 3
 
-    def commande(self):
-        direction = None
-        direction = int(input())
-        print(direction)
-        #input() # normalement à mettre dans bombermanText
-        #self.controller.bouger(direction)
-        #self.actualiser()
-        return(direction)
+    def next(self):
+        # interaction appelle next()
+        if commande = 'espace':
+            self.creerBombe()
+        else: # comment convertir la touche en un char
+            self.move(direction)
+        
 
-    def actualiser(self):
-        pass
+    def setAction(self,commande): # récupérer action
+        # dans le .g    class ActionWidget          def goLeft(self):   self.controller.goLeft()
+        # dans le .c    class Controller            J = Joueur()
+        # def goLeft(self): I = Interaction() ou M = Moteur()  timer() puis J.setAction à chaque time
+        #
+        self.commande=commande
 
-class Avatar:
-    def __init__(self):
-        super().__init__()
-        self.positionX=1
-        self.positionY=1
 
-    def deplacer(self):
-        Joueur1 = Joueur()
-        commande = Joueur1.commande()
-        if commande== Joueur1.gauche:
+
+    def creerBombe(self):
+         pass
+
+    def move(self,direction):
+        if direction == 'gauche'
             self.positionX -= 1
-        if commande == Joueur1.droite:
+        if direction == 'droite':
             self.positionX += 1
-        if commande == Joueur1.haut:
+        if direction == 'bas':
             self.positionY -= 1
-        if commande == Joueur1.bas:
+        if direction == 'haut':
             self.positionY += 1
 
-    def poserBombe(self):
+
+class JoueurOrdi(Joueur):
+    def __init__(self):
+        super().__init__()
+
+    def next(self):
         pass
+
 
 def main():
     avatar = Avatar()
-    avatar.deplacer()
-    print(avatar.positionX)
+    for i in range(5):
+        avatar.deplacer()
+        print("positionX = " + str(avatar.positionX) + ", positionY = " + str(avatar.positionY))
+
+    end
+    #for i in range(5):
+    #    avatar.deplacer()
+    #    print("positionX = " + avatar.positionX + "positionY = " + avatar.positionY)
+    # end
 
 if __name__ == '__main__':
     main()
