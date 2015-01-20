@@ -1,24 +1,24 @@
 import sys
 from case import *
 from map import *
-from
+from element import *
 
 class Moteur:
     def __init__(self, fileNameMap, modeGame):
         self.maps = Carte(fileNameMap)
         self.bombeList = []
         self.players = []
+        self.players.append(JoueurH())
 
-        if modeGame == 0:
-            pass
-        if modeGame == 1:
-            pass
-
+        if modeGame == "PvP":
+            self.players.append(Joueur())
+        if modeGame == "PvE":
+            self.players.append(JoueurIA())
 
 
 
 def testMoteur():
-    game = Moteur('')
+    game = Moteur('', 1)
     pass
 
 
