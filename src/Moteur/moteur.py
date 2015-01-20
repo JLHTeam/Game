@@ -1,8 +1,26 @@
-"""\brief 
-	Moteur class
+import sys
+from case import *
+from map import *
+from
 
-    The detailed description of the class would appear right here.
-"""
+class Moteur:
+    def __init__(self, fileNameMap, modeGame):
+        self.maps = Carte(fileNameMap)
+        self.bombeList = []
+        self.players = []
 
-def fct():
-"""The constructor."""
+        if modeGame == 0:
+            pass
+        if modeGame == 1:
+            pass
+
+
+
+
+def testMoteur():
+    game = Moteur('')
+    pass
+
+
+if __name__=='__main__':
+    testMoteur()

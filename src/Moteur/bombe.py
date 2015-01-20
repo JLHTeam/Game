@@ -1,34 +1,41 @@
+import sys
+
+class Element:
+	def __init__(self, position = (1,1)):
+		self.position = position
 
 
 
-class Bombe:
-	""" Classe mère Bombe qui va permettre de crée les differents types de mur """
-	def __init__(self):
-		self._power = 50 #Puissance de l'explosion
-		self._TBE = 3000  #Time before explosion (ms)
-	
-	""" Fonction permettant d'activer le compte à rebours pour explosion """
-	def activate(self):
-		pass
+class Bombe(Element):
+	"""  """
+	def __init__(self, position, sorte):
+		super().__init__(position)
+		self.sorte = sorte
+		self.statut = 0 #0 = desactivÃ© - 1 = waiting - 2 = expolse
 
-class BlueBombe(Bombe):
-	""" Classe Bombe bleue """
-	def __init__(self):
-		pass
+		if self.sorte == 'Dynamite':
+			self.power = 50 #Puissance de l'explosion
+			self.TBE = 2000  #Time before explosion (ms)
+			self.porte = 1
 
-class GreenBombe(Bombe):
-	""" Classe Bombre verte """
-	def __init__(self):
-		pass
-		
-class RedBombe(Bombe):
-	""" Classe Bombe Rouge puissante """
-	def __init__(self):
-		self._power = 80 #Puissance de l'explosion
+		if self.sorte == 'TNT':
+			self.power = 100 #Puissance de l'explosion
+			self.TBE = 2000  #Time before explosion (ms)
+			self.porte = 2
 
-class BlackBombe(Bombe):
-	""" Classe Bombe noir les plus puissante et explose très rapidement """
-	def __init__(self):
-		self._power = 100 #Puissance de l'explosion
-		self._TBE = 2000  #Time before explosion
-	
+		if self.sorte == 'BombeH':
+			self.power = 200 #Puissance de l'explosion
+			self.TBE = 3000  #Time before explosion (ms)
+			self.porte = 4
+
+
+
+def testElement():
+    elem = Element((0,0))
+    bbmb = Bombe(elem.position, 'TNT')
+    print(bbmb.power)
+
+if __name__=='__main__':
+    testElement()
+
+
