@@ -32,17 +32,21 @@ class Jeu_Window(QMainWindow):
                 super().__init__()
                 self.setWindowTitle('BomberMan JLHTeam')
                 
-        
 class Boutons(QWidget):
             def __init__(self,parent, controller):
                  super().__init__()
                  self.controller = controller
                  
-class Avatar(QWidget):
+class Elements(QWidget):
             def __init__(self,parent, controller):
                  super().__init__()
                  self.controller = controller
-        
+
+class Map(QWidget):
+        def ___init__(self,parent,controller):
+                super().__init__()
+                self.controller=controller
+                
         def main():
         app=QApplication(sys.argv)
         controller = Controller()
