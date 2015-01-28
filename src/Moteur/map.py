@@ -5,7 +5,7 @@ import csv
 class Carte:
     """                   """
     def __init__(self, fileNameMap):
-        self.matrice = None
+        self.matrice = []
         self.dim = (0,0)
         self.fileNameMap = fileNameMap
 
@@ -29,10 +29,10 @@ class Carte:
 
 
 
-
 def testCarte():
     _carte = Carte('../Maps/map1.map')
     _carte.loadMap()
+    print(_carte.matrice[1][1].sorte)
     _carte.refresh()
 
 
