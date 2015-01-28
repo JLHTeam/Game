@@ -9,17 +9,16 @@ class Moteur:
         self.maps.loadMap()
         self.bombeList = []
         self.playerList = []
-        self.playerList.append(JoueurH((1,1), 1))
-        self.bombeList.append(Bombe('Dynamite', (0,0)))
+        self.playerList.append(JoueurH([1,1], 1))
+        self.bombeList.append(Bombe('Dynamite', [1,1]))
 
         if modeGame == "PvP":
-            self.playerList.append(JoueurH((1,1), 1))
+            self.playerList.append(JoueurH([1,1], 1))
         if modeGame == "PvE":
-            self.playerList.append(JoueurIA((1,1), 1))
+            self.playerList.append(JoueurIA([1,1], 1))
 
 
-
-    def moveCommande(self, commande, numPlayer):
+    def setAction(self, commande, numPlayer):
         self.playerList[numPlayer].setAction(commande)
 
     def checkMove(self, player):
@@ -39,16 +38,19 @@ class Moteur:
 
         for i in affectedCaseList:
             if bombe.position[0] + i >= 0 and bombe.position[0] + i <= self.maps.dim[0]:
-                self.maps.matrice[bombe.position[0]+i][bombe.position[1]].hurt()
+                self.maps.matrice[bombe.position[0]+i][bombe.position[1]].hurt(bombe.power)
 
         for i in affectedCaseList:
             if bombe.position[1] + i >= 0 and bombe.position[1] + i <= self.maps.dim[1]:
-                self.maps.matrice[bombe.position[0]][bombe.position[1]+i].hurt()
+                self.maps.matrice[bombe.position[0]][bombe.position[1]+i].hurt(bombe.power)
 
     def refresh(self):
+        self._activation = 0
+        self._explosion = 0
         for i,player in enumerate(self.playerList):
             if player.refresh() == 0:
-                bombeList[i].activateBombe(player.position)
+                self.bombeList[i].activateBombe(player.position)
+                self._activation = 1 # Pour le son et image ACTIVATION BOMBE
             if player.refresh() == -1:
                 if self.checkMove(player) == 0:
                     player.moveOK()
@@ -57,17 +59,27 @@ class Moteur:
 
         for bombe in self.bombeList:
             if bombe.refresh() == 2:
-                checkDegat(bombe)
-
+                self.checkDegat(bombe)
+                self._explosion = 1 # Pour le son et image EXPLOSION BOMBE
 
         self.maps.refresh()
 
 
+
 def testMoteur():
-    game = Moteur('../Maps/map1.map', 1)
+    game = Moteur('../Maps/map1.map', "Pv")
+    print(game.playerList[0].position)
+    game.refresh()
+    game.setAction(1,0)
+    print('move')
+    print(game.playerList[0].position)
+    print('refresh')
+    game.refresh()
+    print(game.playerList[0].position)
+    game.setAction(5,0) # Pose de la bombe
+    print('Pose de la bombe')
     while 1:
         game.refresh()
-
 
 if __name__=='__main__':
     testMoteur()

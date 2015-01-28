@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtCore import *
 
 class Element:
-    def __init__(self, position = (1,1)):
+    def __init__(self, position = [1,1]):
         self.position = position
 
 
@@ -31,8 +31,11 @@ class Bombe(Element):
             self.porte = 4
 
     def refresh(self):
-        if (self.timer.elapsed() > self.TBE):
-            self.explose()
+        if self.statut == 2:
+            self.statut = 0
+        elif self.statut == 1:
+            if (self.timer.elapsed() > self.TBE):
+                self.explose()
         return self.statut
 
     def activateBombe(self, positionJ):
@@ -42,13 +45,14 @@ class Bombe(Element):
 
     def explose(self):
         self.statut = 2
+        print("explosion")
 
 
 
 class Joueur(Element):
     def __init__(self, position, sorte):
         super().__init__(position)
-        self.lastPosition = position
+        self.lastPosition = position.copy()
         self.sorte = sorte
         self.health = 300
         self.statut = 1
@@ -65,13 +69,14 @@ class Joueur(Element):
         pass
 
     def creerBombe(self):
+        self.commande = 0
         return 0
 
     def moveOK(self):
-        self.lastPosition = self.position
+        self.lastPosition = self.position.copy()
 
     def moveBack(self):
-        self.position = self.lastPosition
+        self.position = self.lastPosition.copy()
 
     def move(self, commande):
         if commande == 1:
