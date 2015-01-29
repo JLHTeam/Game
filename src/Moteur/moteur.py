@@ -67,7 +67,7 @@ class Moteur:
 
 
 def testMoteur():
-    game = Moteur('../Maps/map1.map', "Pv")
+    game = Moteur('../Maps/map1.map', "PvP")
     print(game.playerList[0].position)
     game.refresh()
     game.setAction(1,0)

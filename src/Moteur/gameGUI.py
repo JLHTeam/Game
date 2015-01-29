@@ -21,7 +21,7 @@ import sys
 
 class VueDessin(QGraphicsView):
 
-    def __init__(self, parent, controleur):
+    def __init__(self, parent, controller ):
         super().__init__(parent)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -33,40 +33,30 @@ class VueDessin(QGraphicsView):
 
 class PongScene(QGraphicsScene):
 
-    def __init__(self, parent, controleur):
+    def __init__(self, parent, controller ):
         super().__init__(parent)
-        self.controleur = controleur
-        self.controleur.inscrire(self)
-        self.creer_dessin()
+        self.controller = controller
+        self.initDraw()
 
-    def creer_dessin(self):
-        self.setSceneRect(0, 0, 1, 1)
-        brosse_noire = QBrush(QColor(0, 0, 0))
-        brosse_blanche = QBrush(QColor(255, 255, 255))
-        aucun_contour = QPen(Qt.NoPen)
-        self.addRect(0, 0, 1, 1, aucun_contour, brosse_noire)
-        self.raquette_g = self.addRect(0, 0, 0, 0, aucun_contour, brosse_blanche)
-        self.raquette_d = self.addRect(0, 0, 0, 0, aucun_contour, brosse_blanche)
-        self.balle = self.addEllipse(0, 0, 0, 0, aucun_contour, brosse_blanche)
+    def initDraw(self):
+        pass
 
-    def rafraichir(self):
+    def refresh(self):
         pass
 
     def keyPressEvent(self, keyboard):
         key = keyboard.key()
-        if key == Qt.Key_A: self.controleur.déplacer_raquette('GAUCHE', 'UP')
-        if key == Qt.Key_Q: self.controleur.déplacer_raquette('GAUCHE', 'DOWN')
-        if key == Qt.Key_9: self.controleur.déplacer_raquette('DROITE', 'UP')
-        if key == Qt.Key_6: self.controleur.déplacer_raquette('DROITE', 'DOWN')
+        self.controller.setAction(key)
 
-    def keyReleaseEvent(self, keyboard):
-        key = keyboard.key()
-        if key == Qt.Key_A or key == Qt.Key_Q: self.controleur.arrêter_raquette('GAUCHE')
-        if key == Qt.Key_9 or key == Qt.Key_6: self.controleur.arrêter_raquette('DROITE')
 
 
 def test():
     app = QApplication([])
+    ctrl = ControllerGui()
+    ctrl.setMap('../Maps/map1.map')
+    ctrl.setModeGame("PvP")
+    ctrl.newGame()
+    scene = PongScene()
     app.exec()
 
 if __name__ == '__main__':

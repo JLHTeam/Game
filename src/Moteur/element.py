@@ -80,13 +80,13 @@ class Joueur(Element):
         self.position = self.lastPosition.copy()
 
     def move(self, commande):
-        if commande == 1:
+        if commande == "G":
             self.position[0] -= 1
-        if commande == 2:
+        if commande == "D":
             self.position[0] += 1
-        if commande == 3:
+        if commande == "B":
             self.position[1] -= 1
-        if commande == 4:
+        if commande == "H":
             self.position[1] += 1
         self.commande = 0
         return -1
@@ -132,7 +132,7 @@ class JoueurH(Joueur):
         self.sorte = sorte
 
     def refresh(self): # Evolution temps discret (Timer) du mouvement
-        if self.commande == 5:
+        if self.commande == "BB":
             return self.creerBombe()
         else:
             return self.move(self.commande)
