@@ -39,9 +39,10 @@ class Bombe(Element):
         return self.statut
 
     def activateBombe(self, positionJ):
-        self.statut = 1
-        self.position = positionJ
-        self.timer.start()
+        if self.statut == 0:
+            self.statut = 1
+            self.position = positionJ
+            self.timer.start()
 
     def explose(self):
         self.statut = 2
@@ -92,12 +93,37 @@ class Joueur(Element):
 
 
 class JoueurIA(Joueur):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, position, sorte = 1):
+        super().__init__(position, sorte)
+        self.posGoal = []
+        self.posBombList = []
+        self.sorte = sorte
+        self.distanceView = 3
 
-    def refresh(self):
+    def refresh(self): # Evolution temps discret (Timer) du mouvement
         pass
 
+    def setAction(self): # Evolution temps réel de commande - buffer commande
+        pass
+
+    def setAttackGoal(self): # essaye de poser une bombe
+        pass
+
+    def setDefenseGoal(self): # fuire une bombe recherche d'un chemin !!!
+        pass
+
+    def setGoal(self):
+        if self.isDangerousAreas():
+            self.setAttackGoal()
+        else:
+            self.setDefenseGoal()
+
+    def isDangerousAreas(self):
+        for posBombe in self.posBombList:
+            if abs(self.position[0] - posBombe[0]) <= self.distanceView or abs(self.position[1] - posBombe[1]) <= self.distanceView:
+                return 1
+            else:
+                return 0
 
 class JoueurH(Joueur):
     def __init__(self, position, sorte = 1):
@@ -115,10 +141,11 @@ class JoueurH(Joueur):
         self.commande = commande
 
 
+
+
 def testElement():
-    elem = Element((0,0))
-    bbmb = Bombe('TNT',(0,0))
-    print(bbmb.power)
+    elem = JoueurIA([1,2])
+    print(elem.health)
 
 if __name__=='__main__':
     testElement()

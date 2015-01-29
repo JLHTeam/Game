@@ -49,6 +49,7 @@ class ControllerGui(ControllerBase):
             pass #play sound et load gif
         if self.game._explosion:
             pass #play sound et load gif
+        #print(ctrl.game.playerList[0].health)
 
     def newGame(self):
         self.game = Moteur(self.fileNameMap, self.modeGame)
@@ -84,6 +85,17 @@ class ControllerGui(ControllerBase):
         if commande == Qt.Key_Space:
             self.game.setAction(5,0)
 
+    def getPosPlayer(self):
+        pass
+
+    def getPosBombe(self):
+        return
+
+    def getPosPlayer(self):
+        pass
+
+    def getPosWall(self):
+        pass
 
 
 if __name__=='__main__':
