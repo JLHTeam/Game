@@ -1,6 +1,8 @@
 import sys
 from PyQt5.QtCore import *
 
+FPS = 60
+
 class Element:
     def __init__(self, position = [1,1]):
         self.position = position
@@ -13,28 +15,28 @@ class Bombe(Element):
         super().__init__(position)
         self.sorte = sorte
         self.statut = 0 #0 = desactivé - 1 = waiting - 2 = expolse
-        self.timer = QElapsedTimer()
 
         if self.sorte == 'Dynamite':
             self.power = 50 #Puissance de l'explosion
-            self.TBE = 2000  #Time before explosion (ms)
+            self.TBE = 2  #Time before explosion (s)
             self.porte = 1
 
         if self.sorte == 'TNT':
             self.power = 100 #Puissance de l'explosion
-            self.TBE = 2000  #Time before explosion (ms)
+            self.TBE = 2  #Time before explosion (s)
             self.porte = 2
 
         if self.sorte == 'BombeH':
             self.power = 200 #Puissance de l'explosion
-            self.TBE = 3000  #Time before explosion (ms)
+            self.TBE = 3  #Time before explosion (s)
             self.porte = 4
 
-    def refresh(self):
+    def refresh(self): # Rafrachissement tout les 1/FPS
         if self.statut == 2:
             self.statut = 0
         elif self.statut == 1:
-            if (self.timer.elapsed() > self.TBE):
+            self.clock += 1
+            if self.clock > self.TBE*FPS:
                 self.explose()
         return self.statut
 
@@ -42,7 +44,7 @@ class Bombe(Element):
         if self.statut == 0:
             self.statut = 1
             self.position = positionJ
-            self.timer.start()
+            self.clock = 0
 
     def explose(self):
         self.statut = 2
