@@ -2,6 +2,7 @@ import sys
 from case import *
 from map import *
 from element import *
+from random import *
 
 class Moteur:
     def __init__(self, fileNameMap, modeGame):
@@ -9,13 +10,12 @@ class Moteur:
         self.maps.loadMap()
         self.bombeList = []
         self.playerList = []
-        self.playerList.append(JoueurH([1,1], 1))
-        self.bombeList.append(Bombe('Dynamite', [1,1]))
+        self.playerList.append(JoueurH([1,1]))
 
         if modeGame == "PvP":
-            self.playerList.append(JoueurH([1,1], 1))
+            self.playerList.append(JoueurH(self.randPos()))
         if modeGame == "PvE":
-            self.playerList.append(JoueurIA([1,1], 1))
+            self.playerList.append(JoueurIA(self.randPos()))
 
 
     def setAction(self, commande, numPlayer):
@@ -26,6 +26,17 @@ class Moteur:
             return -1
         else:
             return 0
+
+    def randPos(self):
+        x = choice(range(self.maps.dim[0]))
+        y = choice(range(self.maps.dim[1]))
+        while self.maps.matrice[x][y].sorte != 0:
+            x = choice(range(self.maps.dim[0]))
+            y = choice(range(self.maps.dim[1]))
+        return [x,y]
+
+
+
 
     def checkDegat(self, bombe):
         for player in self.playerList:
@@ -67,7 +78,7 @@ class Moteur:
 
 
 def testMoteur():
-    game = Moteur('../Maps/map1.map', "PvP")
+    game = Moteur('../Maps/map1.map', "PvE")
     print(game.playerList[0].position)
     game.refresh()
     game.setAction(1,0)

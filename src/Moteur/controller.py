@@ -43,6 +43,10 @@ class ControllerBase:
 class ControllerGui(ControllerBase):
     def __init__(self):
         super().__init__()
+        self.initSound()
+        self.initAvatar()
+
+    def initSound(self):
         path = "../sounds/"
         extension = ".wav"
         self.soundGeneralStatut = 1
@@ -56,6 +60,14 @@ class ControllerGui(ControllerBase):
         for i in range(4):
             self.soundGame.append(path + "sound_gen_" + str(i) + extension)
 
+    def initAvatar(self):
+        pass # load PNG avatar path
+
+    def setBombeForPLayer(self, bombeType, numPlayer):
+        self.game.bombeList.insert(numPlayer,Bombe(bombeType, [1,1]))
+
+    def setAvatar(self, color, numPlayer):
+        pass
 
     def refresh(self):
         self.game.refresh()
@@ -63,6 +75,7 @@ class ControllerGui(ControllerBase):
 
     def newGame(self):
         self.game = Moteur(self.fileNameMap, self.modeGame)
+
 
     def setMap(self, fileNameMap):
         self.fileNameMap = fileNameMap
@@ -122,7 +135,7 @@ if __name__=='__main__':
     ctrl.setModeGame("PvP")
     ctrl.newGame()
     music = Multimedia(ctrl)
-    #music.playGeneralSound()
+    music.playGeneralSound()
 
 
     timer.timeout.connect(ctrl.refresh)

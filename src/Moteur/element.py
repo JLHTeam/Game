@@ -53,7 +53,7 @@ class Bombe(Element):
 
 
 class Joueur(Element):
-    def __init__(self, position, sorte):
+    def __init__(self, position, sorte = 1):
         super().__init__(position)
         self.lastPosition = position.copy()
         self.sorte = sorte
@@ -83,13 +83,13 @@ class Joueur(Element):
 
     def move(self, commande):
         if commande == "G":
-            self.position[0] -= 1
-        if commande == "D":
-            self.position[0] += 1
-        if commande == "B":
             self.position[1] -= 1
-        if commande == "H":
+        if commande == "D":
             self.position[1] += 1
+        if commande == "B":
+            self.position[0] += 1
+        if commande == "H":
+            self.position[0] -= 1
         self.commande = 0
         return -1
 

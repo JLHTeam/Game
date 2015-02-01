@@ -19,21 +19,24 @@ from controller import *
 import sys
 
 
-class VueDessin(QGraphicsView):
+class WidgetView(QGraphicsView):
 
     def __init__(self, parent, controller ):
         super().__init__(parent)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scene = PongScene(self, controleur)
+        self.scene = PongScene(self, controller)
         self.setScene(self.scene)
+
+    def refresh(self):
+        pass
 
     def resizeEvent(self, event):
         self.fitInView(self.scene.sceneRect(), Qt.KeepAspectRatio)
 
 class PongScene(QGraphicsScene):
 
-    def __init__(self, parent, controller ):
+    def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
         self.initDraw()
@@ -48,15 +51,30 @@ class PongScene(QGraphicsScene):
         key = keyboard.key()
         self.controller.setAction(key)
 
-
-
 def test():
     app = QApplication([])
+
+    timer = QTimer()
     ctrl = ControllerGui()
+    music = Multimedia(ctrl)
+    widgetView = WidgetView(None, ctrl)
+
+    timer.timeout.connect(ctrl.refresh)
+    timer.timeout.connect(music.refresh)
+    timer.timeout.connect(widgetView.refresh)
+
+    music.playGeneralSound()
     ctrl.setMap('../Maps/map1.map')
     ctrl.setModeGame("PvP")
+    ctrl.setAvatar('red')
+    ctrl.setAvatar("blue")
     ctrl.newGame()
-    scene = PongScene()
+    ctrl.setBombeForPLayer("TNT", 0)
+    ctrl.setBombeForPLayer("TNT", 1)
+
+    timer.start((1/FPS)*1000)
+
+    widgetView.show()
     app.exec()
 
 if __name__ == '__main__':
