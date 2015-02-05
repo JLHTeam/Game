@@ -1,12 +1,12 @@
 __author__ = 'Hicham'
 
-try:
-    # Qt5
-    from PyQt5.QtCore import *
-    from PyQt5.QtGui import *
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtMultimedia import *
-except ImportError:
+##try:
+##    # Qt5
+##    from PyQt5.QtCore import *
+##    from PyQt5.QtGui import *
+##    from PyQt5.QtWidgets import *
+##    from PyQt5.QtMultimedia import *
+##except ImportError:
     try:
         # Qt4
         from PyQt4.QtCore import *
