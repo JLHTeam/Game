@@ -67,6 +67,8 @@ class Moteur:
                     player.moveOK()
                 else:
                     player.moveBack()
+            #print(self.playerList[0].position)
+            #print(self.playerList[1].position)
 
         for bombe in self.bombeList:
             if bombe.refresh() == 2:
