@@ -27,12 +27,21 @@ class Carte:
                     self.matrice[i][j].sorte = 0
 
 
+    def saveMap(self):
+        matrix = [row.copy() for row in self.matrice]
+        for i,line in enumerate(self.matrice):
+            for j,element in enumerate(line):
+                matrix[i][j] = element.sorte
+        return matrix
+
 
 
 def testCarte():
     _carte = Carte('../Maps/map1.map')
     _carte.loadMap()
     print(_carte.matrice[1][1].sorte)
+
+    _carte.saveMap()
     _carte.refresh()
 
 

@@ -5,18 +5,20 @@ from element import *
 from random import *
 
 class Moteur:
-    def __init__(self, fileNameMap, modeGame):
+    def __init__(self, fileNameMap, modeGame, listeBombe):
         self.maps = Carte(fileNameMap)
         self.maps.loadMap()
         self.bombeList = []
         self.playerList = []
-        self.playerList.append(JoueurH([1,1]))
 
+        for typeBombe in listeBombe:
+            self.bombeList.append(Bombe(typeBombe))
+
+        self.playerList.append(JoueurH([1,1]))
         if modeGame == "PvP":
             self.playerList.append(JoueurH(self.randPos()))
         if modeGame == "PvE":
             self.playerList.append(JoueurIA(self.randPos()))
-
 
     def setAction(self, commande, numPlayer):
         self.playerList[numPlayer].setAction(commande)
@@ -34,9 +36,6 @@ class Moteur:
             x = choice(range(self.maps.dim[0]))
             y = choice(range(self.maps.dim[1]))
         return [x,y]
-
-
-
 
     def checkDegat(self, bombe):
         for player in self.playerList:

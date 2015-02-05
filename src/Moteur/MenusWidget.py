@@ -25,9 +25,6 @@ class MenuWidget(QWidget):
         self.initWidget()
         self.initLayout()
 
-
-
-
     def initWidget(self):
         # widget
         self.startQPB = QPushButton('Démarrer une Partie', self)

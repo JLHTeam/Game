@@ -64,13 +64,15 @@ def test():
     timer.timeout.connect(widgetView.refresh)
 
     music.playGeneralSound()
+
     ctrl.setMap('../Maps/map1.map')
     ctrl.setModeGame("PvP")
-    ctrl.setAvatar('red')
-    ctrl.setAvatar("blue")
+    ctrl.setBombe('TNT', 1)
+    ctrl.setBombe('TNT', 2)
+    ctrl.setAvatar('red', 1)
+    ctrl.setAvatar("blue", 2)
+
     ctrl.newGame()
-    ctrl.setBombeForPLayer("TNT", 0)
-    ctrl.setBombeForPLayer("TNT", 1)
 
     timer.start((1/FPS)*1000)
 

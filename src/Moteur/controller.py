@@ -15,6 +15,7 @@ except ImportError:
 
 from moteur import *
 from Multimedia import *
+import os
 
 """\brief
 	Moteur class
@@ -44,7 +45,8 @@ class ControllerGui(ControllerBase):
     def __init__(self):
         super().__init__()
         self.initSound()
-        self.initAvatar()
+        self.fileNameAvatar = ["", ""]
+        self.bombePlayer = ["", ""]
 
     def initSound(self):
         path = "../sounds/"
@@ -60,31 +62,23 @@ class ControllerGui(ControllerBase):
         for i in range(4):
             self.soundGame.append(path + "sound_gen_" + str(i) + extension)
 
-    def initAvatar(self):
-        pass # load PNG avatar path
-
-    def setBombeForPLayer(self, bombeType, numPlayer):
-        self.game.bombeList.insert(numPlayer,Bombe(bombeType, [1,1]))
+    def setBombe(self, bombeType, numPlayer):
+        self.bombePlayer[numPlayer-1] = bombeType
 
     def setAvatar(self, color, numPlayer):
-        pass
+        self.fileNameAvatar[numPlayer-1] = color
 
     def refresh(self):
         self.game.refresh()
-        #print(ctrl.game.playerList[0].health)
 
     def newGame(self):
-        self.game = Moteur(self.fileNameMap, self.modeGame)
-
+        self.game = Moteur(self.fileNameMap, self.modeGame, self.bombePlayer)
 
     def setMap(self, fileNameMap):
         self.fileNameMap = fileNameMap
 
     def setModeGame(self, modeGame):
         self.modeGame = modeGame
-
-    def setAvatar(self, fileNameAvatar):
-        self.fileNameAvatar = fileNameAvatar
 
     def getAvatar(self):
         return self.fileNameAvatar
@@ -125,6 +119,17 @@ class ControllerGui(ControllerBase):
                     posWallList.append([x,y])
         return posWallList
 
+    def saveGame(self, filePath):
+        if not os.path.exists(filePath):
+            os.makedirs(filePath)
+        fileSaveMap = open(filePath + "/saveMap.map", 'w+')
+        fileSaveOther = open(filePath + "/saveOpt.map", 'w+')
+        # sauvegarde de l'état de la map, des type de bombes en jeu, du mode de jeu
+        fileSaveOther.write(self.modeGame + "\n" + self.bombePlayer[0] + "\n" +  self.bombePlayer[1])
+        matrix = self.game.maps.saveMap()
+        fileMap = csv.writer(fileSaveMap, delimiter = '\t', lineterminator = '\n')
+        fileMap.writerows(matrix)
+
 
 if __name__=='__main__':
     app = QCoreApplication([])
@@ -133,24 +138,23 @@ if __name__=='__main__':
     ctrl = ControllerGui()
     ctrl.setMap('../Maps/map1.map')
     ctrl.setModeGame("PvP")
+    ctrl.setBombe('TNT', 1)
+    ctrl.setBombe('TNT', 2)
+    ctrl.setAvatar("red", 1)
+    ctrl.setAvatar("red", 2)
     ctrl.newGame()
+    print(ctrl.game.maps.dim)
+    ctrl.saveGame("../save/")
     music = Multimedia(ctrl)
     music.playGeneralSound()
 
 
     timer.timeout.connect(ctrl.refresh)
     timer.timeout.connect(music.refresh)
-    timer.start((1/FPS)*1000)
+    #timer.start((1/FPS)*1000)
 
-    i = 0
-    while i < 10000000:
-        i += 1
-
-    ctrl.setAction(Qt.Key_Space)
+    ctrl.saveGame("../save/blbla")
 
 
 
-    print(ctrl.getPosWall())
-    print(ctrl.getPosPlayer())
-    print(ctrl.getPosBombe())
     app.exec()

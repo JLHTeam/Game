@@ -45,6 +45,7 @@ class MainWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+
     timer = QTimer()
     ctrl = ControllerGui()
     music = Multimedia(ctrl)
@@ -60,7 +61,7 @@ def main():
     ctrl.setAvatar('red')
     ctrl.setAvatar("blue")
 
-    trl.setBombeForPLayer("TNT", 0)
+    ctrl.setBombeForPLayer("TNT", 0)
     ctrl.setBombeForPLayer("TNT", 1)
 
     ctrl.newGame()

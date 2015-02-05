@@ -11,7 +11,7 @@ class Element:
 
 class Bombe(Element):
     """  """
-    def __init__(self, sorte, position):
+    def __init__(self, sorte, position = [1,1]):
         super().__init__(position)
         self.sorte = sorte
         self.statut = 0 #0 = desactivé - 1 = waiting - 2 = expolse
