@@ -35,11 +35,10 @@ class ControllerBase:
 
     def avertir(self):
         for client in self.clients:
-            client.rafraichir()
+            client.refresh()
 
     def info(self):
         return self.message
-
 
 class ControllerGui(ControllerBase):
     def __init__(self):
