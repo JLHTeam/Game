@@ -1,17 +1,17 @@
-try:
-    # Qt5
-    from PyQt5.QtCore import *
-    from PyQt5.QtGui import *
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtMultimedia import *
-except ImportError:
-    try:
+##try:
+##    # Qt5
+##    from PyQt5.QtCore import *
+##    from PyQt5.QtGui import *
+##    from PyQt5.QtWidgets import *
+##    from PyQt5.QtMultimedia import *
+##except ImportError:
+##    try:
         # Qt4
-        from PyQt4.QtCore import *
-        from PyQt4.QtGui import *
-    except ImportError:
-        print('Merci d\'installer PyQt5 ou PyQt4.')
-        exit()
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+##except ImportError:
+##        print('Merci d\'installer PyQt5 ou PyQt4.')
+##        exit()
 
 from controller import *
 import sys
@@ -21,7 +21,7 @@ import sys
 class MainWindow(QMainWindow):
     def __init__(self, controller, timer):
         super().__init__()
-        self.setWindowTitle('BomberMan JLHTeam_Menu')
+        self.setWindowTitle('BomberMan JLHTeam')
         self.definir_fenetre_principale(self)
         self.controller = controller
         menu_widget = MenuWidget(self, self.controller)
@@ -67,29 +67,30 @@ class MenuWidget(QFrame):
 
     def initWidget(self):
         self.layoutV = QVBoxLayout()
-        self.texte = QLabel('MENU PRINCIPAL : Bienvenue dans BomberMan JLHTeam!')
+        self.texte = QLabel('MENU PRINCIPAL : Bienvenue !')
         self.initPartieQP = QPushButton('Démarrer une Partie',self)
         self.chargerPartieQP = QPushButton('Charger une Partie',self)
         self.optionsQP = QPushButton('Options',self)
         self.quitterQP = QPushButton('Quitter',self)
 
     def setStyleWidget(self):
-        self.initPartieQP.setStyleSheet("border : None ; font-weight: bold;  font-size: 20pt;")
-        self.chargerPartieQP.setStyleSheet("border : None ; font-weight: bold;  font-size: 20pt;")
-        self.optionsQP.setStyleSheet("border : None ; font-weight: bold;  font-size: 20pt;")
-        self.quitterQP.setStyleSheet("border : None ; font-weight: bold;  font-size: 20pt;")
-        self.texte.setStyleSheet("color : yellow; font-weight: bold")
-        self.setStyleSheet("MenuWidget{background-image: url(../image/bomberman_explosion.png); color:white}")
-        image = QPixmap("../image/bomberman_explosion.png")
+        self.initPartieQP.setStyleSheet("border : None ; font-weight: bold;  font-size: 25pt;color: white")
+        self.chargerPartieQP.setStyleSheet("border : None ; font-weight: bold;  font-size: 25pt; color: white")
+        self.optionsQP.setStyleSheet("border : None ; font-weight: bold;  font-size: 25pt; color: white")
+        self.quitterQP.setStyleSheet("border : None ; font-weight: bold;  font-size: 25pt; color: white")
+        self.texte.setStyleSheet("color : yellow; font-weight: bold ; font-size: 20pt")
+        self.setStyleSheet("MenuWidget{background-image: url(../image/menuAttenue.png); color:white}")
+        image = QPixmap("../image/menuAttenue.png")
         size = image.width()
-        self.parent.setFixedSize(352,224)
+        self.parent.setFixedSize(452,378)
 
     def setWidget(self):
+        self.layoutV.addWidget(self.texte)
         self.layoutV.addWidget(self.initPartieQP)
         self.layoutV.addWidget(self.chargerPartieQP)
         self.layoutV.addWidget(self.optionsQP)
         self.layoutV.addWidget(self.quitterQP)
-        self.layoutV.addWidget(self.texte)
+        self.layoutV.setAlignment(Qt.AlignHCenter)
         self.setLayout(self.layoutV)
 
     def setConnection(self):
@@ -127,20 +128,23 @@ class DemarrerWidget(QFrame):
         self.layoutHBombeP1 = QHBoxLayout()
         self.layoutHAvatarP2 = QHBoxLayout()
         self.layoutHBombeP2 = QHBoxLayout()
+        self.indication = QLabel('Faites vos choix:')
         self.PVPQP = QPushButton('Joueur VS Joueur',self)
         self.PVEQP = QPushButton('Joueur VS Ordinateur',self)
         self.backQP = QPushButton('Revenir à l’écran d’accueil',self)
         self.Map1QP = QPushButton(' Map 1 ',self)
         self.Map2QP  = QPushButton('Map 2',self)
         self.Map3QP  = QPushButton('Map 3',self)
-        self.indicationMap = QLabel('Choisir la Map')
-        self.indicationJoueur = QLabel('Choisir un Joueur')
-        self.avatarP1RedQP = QPushButton('Avatar red',self)
-        self.avatarP1BlueQP = QPushButton('Avatar blue',self)
-        self.avatarP1GreenQP = QPushButton('Avatar green',self)
-        self.avatarP2RedQP = QPushButton('Avatar red',self)
-        self.avatarP2BlueQP = QPushButton('Avatar blue',self)
-        self.avatarP2GreenQP = QPushButton('Avatar green',self)
+ #       self.indicationMap = QLabel('Choisissez votre Environnement:')
+        self.indicationJoueurP1 = QLabel('Choisir ')
+        self.indicationJoueurP2 = QLabel('Choisir ')
+        #self.indicationBombeP2 = QLabel('Choisir une Bombe')
+        self.avatarP1RedQP = QPushButton('Avatar Rouge',self)
+        self.avatarP1BlueQP = QPushButton('Avatar Bleu',self)
+        self.avatarP1GreenQP = QPushButton('Avatar Vert',self)
+        self.avatarP2RedQP = QPushButton('Avatar Rouge',self)
+        self.avatarP2BlueQP = QPushButton('Avatar Bleu',self)
+        self.avatarP2GreenQP = QPushButton('Avatar Vert',self)
         self.TNTP1QP = QPushButton('TNT',self)
         self.dynamiteP1QP = QPushButton('Dynamite',self)
         self.bombeHP1QP = QPushButton('Bombe H',self)
@@ -148,47 +152,52 @@ class DemarrerWidget(QFrame):
         self.dynamiteP2QP = QPushButton('Dynamite',self)
         self.bombeHP2QP = QPushButton('Bombe H',self)
         self.DemarrerPartieQP = QPushButton('Démarrer la Partie',self)
-        self.indicationBombe = QLabel('Choisir une Bombe')
+        #self.indicationBombeP1 = QLabel('Choisir une Bombe')
         self.status=0
 
     def setStyleWidget(self):
-        self.PVEQP.setStyleSheet("border : None ; font-weight: bold 30px") #que le tour:  border-style: outset
-        self.PVPQP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.backQP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.Map1QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.Map2QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.Map3QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.avatarP1RedQP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.avatarP1BlueQP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.avatarP1GreenQP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.TNTP1QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.dynamiteP1QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.bombeHP1QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.avatarP2RedQP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.avatarP2BlueQP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.avatarP2GreenQP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.TNTP2QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.dynamiteP2QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.bombeHP2QP.setStyleSheet("border : None ; font-weight: bold 30px")
-        self.setStyleSheet("DemarrerWidget{background-image: url(../image/Bomberman.jpg); color:white}")
-        self.parent.setFixedSize(400,300)
+        self.PVEQP.setStyleSheet("border : None ; font-weight: bold 30px ; font-size: 20px") #que le tour:  border-style: outset
+        self.PVPQP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px")
+        self.backQP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px")
+        self.indication.setStyleSheet("font-weight: bold 30px; font-size: 20px ; color : purple")
+        self.Map1QP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px")
+        self.Map2QP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px")
+        self.Map3QP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px")
+        self.avatarP1RedQP.setStyleSheet("border : None ; font-weight: bold 30px ; font-size: 20px ; color : black")
+        self.avatarP1BlueQP.setStyleSheet("border : None ; font-weight: bold 30px ; font-size: 20px ; color : black")
+        self.avatarP1GreenQP.setStyleSheet("border : None ; font-weight: bold 30px ; font-size: 20px ; color : black")
+        self.TNTP1QP.setStyleSheet("border : None ; font-weight: bold 30px ;; font-size: 20px ; color : black")
+        self.dynamiteP1QP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px ; color : black")
+        self.bombeHP1QP.setStyleSheet("border : None ; font-weight: bold 30px ; font-size: 20px; color : black")
+        self.avatarP2RedQP.setStyleSheet("border : None ; font-weight: bold 30px ; font-size: 20px ; color : black")
+        self.avatarP2BlueQP.setStyleSheet("border : None ; font-weight: bold 30px ; font-size: 20px ; color : black")
+        self.avatarP2GreenQP.setStyleSheet("border : None ; font-weight: bold 30px ; font-size: 20px ; color : black")
+        self.TNTP2QP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px ; color : black")
+        self.dynamiteP2QP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px ; color : black")
+        self.bombeHP2QP.setStyleSheet("border : None ; font-weight: bold 30px; font-size: 20px ; color : black")
+        self.boxP1.setStyleSheet("font-size: 20px; font-weight: bold ")
+        self.boxP2.setStyleSheet("font-size: 20px; font-weight: bold ")
+        self.setStyleSheet("DemarrerWidget{background-image: url(../image/fondDemarrerOK.png); color:white}")
+        self.parent.setFixedSize(904,378)
 
     def setWidget(self):
+
+        self.layoutHModeGame.addWidget(self.indication)
         self.layoutHModeGame.addWidget(self.PVPQP)
         self.layoutHModeGame.addWidget(self.PVEQP)
         self.mainLayoutV.addLayout(self.layoutHModeGame)
 
-        self.layoutHMap.addWidget(self.indicationMap)
+#        self.layoutHMap.addWidget(self.indicationMap)
         self.layoutHMap.addWidget(self.Map1QP )
         self.layoutHMap.addWidget(self.Map2QP )
         self.layoutHMap.addWidget(self.Map3QP )
         self.mainLayoutV.addLayout(self.layoutHMap)
 
-        self.layoutHAvatarP1.addWidget(self.indicationJoueur)
+ #       self.layoutHAvatarP1.addWidget(self.indicationJoueurP1)
         self.layoutHAvatarP1.addWidget(self.avatarP1RedQP)
         self.layoutHAvatarP1.addWidget(self.avatarP1BlueQP)
         self.layoutHAvatarP1.addWidget(self.avatarP1GreenQP)
-        self.layoutHBombeP1.addWidget(self.indicationBombe)
+#        self.layoutHBombeP1.addWidget(self.indicationBombeP1)
         self.layoutHBombeP1.addWidget(self.TNTP1QP)
         self.layoutHBombeP1.addWidget(self.dynamiteP1QP)
         self.layoutHBombeP1.addWidget(self.bombeHP1QP)
@@ -196,11 +205,11 @@ class DemarrerWidget(QFrame):
         self.layoutVP1.addLayout(self.layoutHBombeP1)
         self.boxP1.setLayout(self.layoutVP1)
 
-        self.layoutHAvatarP2.addWidget(self.indicationJoueur)
+ #       self.layoutHAvatarP2.addWidget(self.indicationJoueurP2)
         self.layoutHAvatarP2.addWidget(self.avatarP2RedQP)
         self.layoutHAvatarP2.addWidget(self.avatarP2BlueQP)
         self.layoutHAvatarP2.addWidget(self.avatarP2GreenQP)
-        self.layoutHBombeP2.addWidget(self.indicationBombe)
+ #       self.layoutHBombeP2.addWidget(self.indicationBombeP2)
         self.layoutHBombeP2.addWidget(self.TNTP2QP)
         self.layoutHBombeP2.addWidget(self.dynamiteP2QP)
         self.layoutHBombeP2.addWidget(self.bombeHP2QP)
@@ -230,9 +239,9 @@ class DemarrerWidget(QFrame):
         self.dynamiteP1QP.clicked.connect(self.onP1Dynamite)
         self.bombeHP1QP.clicked.connect(self.onP1BombeH)
 
-        self.avatarP2RedQP.clicked.connect(self.onAvatarP1Red)
-        self.avatarP2BlueQP.clicked.connect(self.onAvatarP1Blue)
-        self.avatarP2GreenQP.clicked.connect(self.onAvatarP1Green)
+        self.avatarP2RedQP.clicked.connect(self.onAvatarP2Red)
+        self.avatarP2BlueQP.clicked.connect(self.onAvatarP2Blue)
+        self.avatarP2GreenQP.clicked.connect(self.onAvatarP2Green)
         self.TNTP2QP.clicked.connect(self.onP2TNT)
         self.dynamiteP2QP.clicked.connect(self.onP2Dynamite)
         self.bombeHP2QP.clicked.connect(self.onP2BombeH)
@@ -242,75 +251,81 @@ class DemarrerWidget(QFrame):
         self.DemarrerPartieQP.setDisabled(1)
 
     def onPVP(self):
-        self.PVPQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : brown")
+        self.PVPQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.PVEQP.setDisabled(1)
         self.status += 1
         self.controller.setModeGame("PvP")
         self.check_status()
 
     def onPVE(self):
-        self.PVEQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : brown")
+        self.PVEQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.PVPQP.setDisabled(1)
         self.status += 1
         self.controller.setModeGame("PvE")
         self.check_status()
 
     def onAvatarP1Red(self):
-        self.avatarP1RedQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.avatarP1RedQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.avatarP1BlueQP.setDisabled(1)
         self.avatarP1GreenQP.setDisabled(1)
+        self.avatarP2RedQP .setDisabled(1)
         self.status += 1
         Avatar = 'A1'
         self.controller.setAvatar(Avatar, 1)
         self.check_status()
 
     def onAvatarP1Blue(self):
-        self.avatarP1BlueQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.avatarP1BlueQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.avatarP1RedQP.setDisabled(1)
         self.avatarP1GreenQP.setDisabled(1)
+        self.avatarP2BlueQP .setDisabled(1)
         self.status += 1
         Avatar = 'A2'
         self.controller.setAvatar(Avatar, 1)
         self.check_status()
 
     def onAvatarP1Green(self):
-        self.avatarP1GreenQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.avatarP1GreenQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.avatarP1RedQP.setDisabled(1)
         self.avatarP1BlueQP.setDisabled(1)
+        self.avatarP2GreenQP .setDisabled(1)
         self.status += 1
         Avatar = 'A3'
         self.controller.setAvatar(Avatar, 1)
         self.check_status()
 
     def onAvatarP2Red(self):
-        self.avatarP2RedQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.avatarP2RedQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.avatarP2BlueQP.setDisabled(1)
         self.avatarP2GreenQP.setDisabled(1)
+        self.avatarP1RedQP .setDisabled(1)
         self.status += 1
         Avatar = 'A1'
         self.controller.setAvatar(Avatar, 2)
         self.check_status()
 
     def onAvatarP2Blue(self):
-        self.avatarP2BlueQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.avatarP2BlueQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.avatarP2RedQP.setDisabled(1)
         self.avatarP2GreenQP.setDisabled(1)
+        self.avatarP1BlueQP .setDisabled(1)
         self.status += 1
         Avatar = 'A2'
         self.controller.setAvatar(Avatar, 2)
         self.check_status()
 
     def onAvatarP2Green(self):
-        self.avatarP2GreenQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.avatarP2GreenQP.setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.avatarP2RedQP.setDisabled(1)
-        self.bavatarP2BlueQP.setDisabled(1)
+        self.avatarP2BlueQP.setDisabled(1)
+        self.avatarP1GreenQP .setDisabled(1)
         self.status += 1
         Avatar = 'A3'
         self.controller.setAvatar(Avatar, 2)
         self.check_status()
 
     def onMap1(self):
-        self.Map1QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.Map1QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.Map2QP .setDisabled(1)
         self.Map3QP .setDisabled(1)
         self.status += 1
@@ -319,7 +334,7 @@ class DemarrerWidget(QFrame):
         self.check_status()
 
     def onMap2(self):
-        self.Map2QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.Map2QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.Map1QP .setDisabled(1)
         self.Map3QP .setDisabled(1)
         self.status += 1
@@ -328,7 +343,7 @@ class DemarrerWidget(QFrame):
         self.check_status()
 
     def onMap3(self):
-        self.Map3QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.Map3QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.Map1QP .setDisabled(1)
         self.Map2QP .setDisabled(1)
         self.status += 1
@@ -337,8 +352,9 @@ class DemarrerWidget(QFrame):
         self.check_status()
 
     def onMapUnknow(self):
-        self.Map2QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.Map2QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.Map1QP .setDisabled(1)
+        self.Map2QP .setDisabled(1)
         self.Map3QP .setDisabled(1)
         self.status += 1
         Map = '../Maps/map2.map'
@@ -346,16 +362,16 @@ class DemarrerWidget(QFrame):
         self.check_status()
 
     def onP1TNT(self):
-        self.TNTQP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
-        self.dynamiteQP .setDisabled(1)
-        self.bombeHQP .setDisabled(1)
+        self.TNTP1QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
+        self.dynamiteP1QP .setDisabled(1)
+        self.bombeHP1QP .setDisabled(1)
         self.status += 1
         Bombe = 'TNT'
-        self.controller.setBombe(Bombe)
+        self.controller.setBombe(Bombe, 1)
         self.check_status()
 
     def onP1Dynamite(self):
-        self.dynamiteP1QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.dynamiteP1QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.TNTP1QP .setDisabled(1)
         self.bombeHP1QP .setDisabled(1)
         self.status += 1
@@ -364,7 +380,7 @@ class DemarrerWidget(QFrame):
         self.check_status()
 
     def onP1BombeH(self):
-        self.bombeHP1QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.bombeHP1QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.TNTP1QP .setDisabled(1)
         self.dynamiteP1QP .setDisabled(1)
         self.status += 1
@@ -373,16 +389,16 @@ class DemarrerWidget(QFrame):
         self.check_status()
 
     def onP2TNT(self):
-        self.TNTP2QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.TNTP2QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.dynamiteP2QP .setDisabled(1)
-        self.bombeP2HQP .setDisabled(1)
+        self.bombeHP2QP .setDisabled(1)
         self.status += 1
         Bombe = 'TNT'
         self.controller.setBombe(Bombe, 2)
         self.check_status()
 
     def onP2Dynamite(self):
-        self.dynamiteP2QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink")
+        self.dynamiteP2QP .setStyleSheet(" font-weight: bold 30px ;  border-style: outset ; color : pink; font-size: 20px")
         self.TNTP2QP .setDisabled(1)
         self.bombeHP2QP .setDisabled(1)
         self.status += 1
@@ -391,7 +407,7 @@ class DemarrerWidget(QFrame):
         self.check_status()
 
     def onP2BombeH(self):
-        self.bombeHP2QP .setStyleSheet(" font-weight: bold 150px ;  border-style: outset ; color : pink")
+        self.bombeHP2QP .setStyleSheet(" font-weight: bold 150px ;  border-style: outset ; color : pink; font-size: 20px")
         self.TNTP2QP .setDisabled(1)
         self.dynamiteP2QP .setDisabled(1)
         self.status += 1
@@ -409,26 +425,47 @@ class DemarrerWidget(QFrame):
     def onPlay(self):
         self.DemarrerPartieQP.clicked.connect(self.parent.jouer)
 
-class ElementsWidget(QWidget):
-    def __init__(self,parent, controller):
-        super().__init__()
-        self.controller = controller
-
-class MapWidget(QWidget):
-    def ___init__(self,parent,controller):
-        super().__init__()
-        self.controller = controller
+##class ElementsWidget(QWidget):
+##    def __init__(self,parent, controller):
+##        super().__init__()
+##        self.controller = controller
+##
+##class MapWidget(QWidget):
+##    def ___init__(self,parent,controller):
+##        super().__init__()
+##        self.controller = controller
 
 class JeuWindow(QFrame):
     def __init__(self, parent, controller):
         super().__init__()
         self.controller = controller
-        self.setScene(self.dessiner())
 
-    def dessiner(self):
-        scene = QGraphicsScene()
-        scene.setSceneRect(0, 0, 320, 320)
-        self.fond = QLabel(self)
+
+        
+
+class SceneWiew(QGraphicsView):
+        def __init__(self, parent, controller):
+            super().__init__()
+            self.controller = controller
+            self.setScene(self.dessiner())
+            self.initWidget()
+            self.setWidget()
+            
+
+        
+        def initWidget(self):
+            self.layoutV = QVBoxLayout()
+            self.texte = QLabel('Essai')
+
+        def setWidget(self):
+            self.layoutV.addWidget(self.texte)
+            self.setLayout(self.layoutV)
+ 
+
+        def dessiner(self):
+            self.scene = QGraphicsScene()
+            self.scene.setSceneRect(0, 0, 320, 320)
+            self.fond = QLabel(self)
         #                self.fond.setPixmap(QPixmap('image/bombermanTeam.jpg'))
         #                self.fond.setStyleSheet("background-image: url(./image/bombermanTeam.jpg)")
         #                bouton_widget=Boutons(self, self.controller)
@@ -441,7 +478,7 @@ class JeuWindow(QFrame):
         #               scene.addEllipse(200,100,20,20, stylo)
         #               brosse = QBrush(QColor(128,0,128), Qt.SolidPattern)
         #               scene.addRect(100,200,50,50, stylo,brosse)
-        return scene
+            return self.scene
 
 
 def main():
@@ -451,11 +488,10 @@ def main():
     fenetre = MainWindow(controller, timer)
     music = Multimedia(controller)
 
-    music.playGeneralSound()
-
+#    music.playGeneralSound()
     timer.timeout.connect(controller.refresh)
     timer.timeout.connect(music.refresh)
-    #timer.timeout.connect(fenetre.refresh)
+#    timer.timeout.connect(fenetre.refresh)
 
 
 
