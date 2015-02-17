@@ -16,17 +16,15 @@ from PyQt4.QtGui import *
 from controller import *
 import sys
 
-
-
 class MainWindow(QMainWindow):
-    def __init__(self, controller, timer):
+    def __init__(self, controller):
         super().__init__()
         self.setWindowTitle('BomberMan JLHTeam')
         self.definir_fenetre_principale(self)
         self.controller = controller
         menu_widget = MenuWidget(self, self.controller)
         self.setCentralWidget(menu_widget)
-        self.timer = timer
+        self.jeuInitOK = 0
 
     def setWidget(self, widget):
         self.setCentralWidget(widget)
@@ -49,11 +47,18 @@ class MainWindow(QMainWindow):
         self.fenetre.setWidget(menu_widget)
 
     def jouer(self):
+        self.controller.newGame()
         jeu_widget = JeuWindow(self.fenetre,self.controller)
         self.fenetre.setWidget(jeu_widget)
         self.controller.newGame()
-        timer.start(1/fps)
+        self.jeuInitOK = 0
 
+    def refresh(self):
+        if self.jeuInitOK :
+            self.controller.refresh()
+            self.controller.avertir()
+        
+        
 
 class MenuWidget(QFrame):
     def __init__(self,parent, controller):
@@ -94,12 +99,12 @@ class MenuWidget(QFrame):
         self.setLayout(self.layoutV)
 
     def setConnection(self):
-        self.initPartieQP.clicked.connect(self.DemarrerOuvrir)
+        self.initPartieQP.clicked.connect(self.parent.demarrerPartie)
         self.chargerPartieQP.clicked.connect(self.MenuCharger)
 
 
-    def DemarrerOuvrir(self):
-        self.initPartieQP.clicked.connect(self.parent.demarrerPartie)
+ #   def DemarrerOuvrir(self):
+#        self.initPartieQP.clicked.connect(self.parent.demarrerPartie)
 
     def MenuCharger(self):
         self.chargerPartieQP.clicked.connect(self.parent.chargerPartie)
@@ -247,7 +252,7 @@ class DemarrerWidget(QFrame):
         self.bombeHP2QP.clicked.connect(self.onP2BombeH)
 
         self.backQP.clicked.connect(self.backBouton)
-        self.DemarrerPartieQP.clicked.connect(self.onPlay)
+        self.DemarrerPartieQP.clicked.connect(self.parent.jouer)
         self.DemarrerPartieQP.setDisabled(1)
 
     def onPVP(self):
@@ -270,7 +275,7 @@ class DemarrerWidget(QFrame):
         self.avatarP1GreenQP.setDisabled(1)
         self.avatarP2RedQP .setDisabled(1)
         self.status += 1
-        Avatar = 'A1'
+        Avatar = 'Red'
         self.controller.setAvatar(Avatar, 1)
         self.check_status()
 
@@ -280,7 +285,7 @@ class DemarrerWidget(QFrame):
         self.avatarP1GreenQP.setDisabled(1)
         self.avatarP2BlueQP .setDisabled(1)
         self.status += 1
-        Avatar = 'A2'
+        Avatar = 'Blue'
         self.controller.setAvatar(Avatar, 1)
         self.check_status()
 
@@ -290,7 +295,7 @@ class DemarrerWidget(QFrame):
         self.avatarP1BlueQP.setDisabled(1)
         self.avatarP2GreenQP .setDisabled(1)
         self.status += 1
-        Avatar = 'A3'
+        Avatar = 'Creen'
         self.controller.setAvatar(Avatar, 1)
         self.check_status()
 
@@ -300,7 +305,7 @@ class DemarrerWidget(QFrame):
         self.avatarP2GreenQP.setDisabled(1)
         self.avatarP1RedQP .setDisabled(1)
         self.status += 1
-        Avatar = 'A1'
+        Avatar = 'Red'
         self.controller.setAvatar(Avatar, 2)
         self.check_status()
 
@@ -310,7 +315,7 @@ class DemarrerWidget(QFrame):
         self.avatarP2GreenQP.setDisabled(1)
         self.avatarP1BlueQP .setDisabled(1)
         self.status += 1
-        Avatar = 'A2'
+        Avatar = 'Blue'
         self.controller.setAvatar(Avatar, 2)
         self.check_status()
 
@@ -320,7 +325,7 @@ class DemarrerWidget(QFrame):
         self.avatarP2BlueQP.setDisabled(1)
         self.avatarP1GreenQP .setDisabled(1)
         self.status += 1
-        Avatar = 'A3'
+        Avatar = 'Green'
         self.controller.setAvatar(Avatar, 2)
         self.check_status()
 
@@ -422,8 +427,8 @@ class DemarrerWidget(QFrame):
         if self.status == 6:
             self.DemarrerPartieQP.setDisabled(0)
 
-    def onPlay(self):
-        self.DemarrerPartieQP.clicked.connect(self.parent.jouer)
+ #   def onPlay(self):
+ #       self.DemarrerPartieQP.clicked.connect(self.parent.jouer)
 
 ##class ElementsWidget(QWidget):
 ##    def __init__(self,parent, controller):
@@ -439,62 +444,149 @@ class JeuWindow(QFrame):
     def __init__(self, parent, controller):
         super().__init__()
         self.controller = controller
+        self.initWidget()
+        self.setWidget()
+        self.controller.inscrire(self)
+
+    def initWidget(self):
+            self.layoutV = QVBoxLayout()
+            self.texte = QLabel('Essai')
+            self.scene = SceneView( self , self.controller)
+
+    def setWidget(self):
+            self.layoutV.addWidget(self.texte)
+            self.layoutV.addWidget(self.scene)
+            self.setLayout(self.layoutV)
+
+class SceneView(QGraphicsView):
+        def __init__(self, parent, controller):
+            super().__init__(parent)
+            self.scene = SceneGraphics(self,controller)
+            self.setScene(self.scene)
 
 
-        
-
-class SceneWiew(QGraphicsView):
+class SceneGraphics(QGraphicsScene):
         def __init__(self, parent, controller):
             super().__init__()
             self.controller = controller
-            self.setScene(self.dessiner())
-            self.initWidget()
-            self.setWidget()
-            
+            self.controller.inscrire(self)
+            self.controller.getMap()
+            self.init()
+  
 
+        def init(self):
+            self.initScene()
+            self.initPersonnageBombe()
+ #           self.refresh()
+ #           return self.scene
         
-        def initWidget(self):
-            self.layoutV = QVBoxLayout()
-            self.texte = QLabel('Essai')
+        def keyPressEvent(self, keyboard):
+            key = keyboard.key()
+            self.controller.setAction(key)
+            print('ok3')
 
-        def setWidget(self):
-            self.layoutV.addWidget(self.texte)
-            self.setLayout(self.layoutV)
- 
+        def initScene(self):
+ #           self.scene = QGraphicsScene()
+            self.setSceneRect(0, 0, 2*32*self.controller.dim, 2*32*self.controller.dim)
+            self.sol = QPixmap(self.controller.sol)
+            self.murD = QPixmap(self.controller.murD)
+            self.murDAbime = QPixmap(self.controller.murDAbime)
+            self.murND = QPixmap(self.controller.murND)
 
-        def dessiner(self):
-            self.scene = QGraphicsScene()
-            self.scene.setSceneRect(0, 0, 320, 320)
-            self.fond = QLabel(self)
-        #                self.fond.setPixmap(QPixmap('image/bombermanTeam.jpg'))
-        #                self.fond.setStyleSheet("background-image: url(./image/bombermanTeam.jpg)")
-        #                bouton_widget=Boutons(self, self.controller)
-        #                scene.addWidget(bouton_widget)
-        #                self.fond.setAlignment(Qt.AlignHCenter)
+           
+            for i in range(self.controller.dim):
+                self.line=[]
+                for j in range(self.controller.dim):
+                    self.line.append(QGraphicsPixmapItem(self.sol))
+                for k,line in enumerate(self.line):
+                    self.addItem(line)
+                    line.setPos( i*32*2, k*32*2)
 
-        #               texte = scene.addText("Hello, world!")
-        #               scene.addLine(50, 50, 200, 200)
-        #               stylo = QPen(Qt.blue, 5, Qt.SolidLine)
-        #               scene.addEllipse(200,100,20,20, stylo)
-        #               brosse = QBrush(QColor(128,0,128), Qt.SolidPattern)
-        #               scene.addRect(100,200,50,50, stylo,brosse)
-            return self.scene
+            for i,line in enumerate(self.controller.carte.matrice):
+               for j,element in enumerate(line):
+                   if element.sorte == 1:
+                       murND = QGraphicsPixmapItem(self.murND)
+                       self.addItem(murND)
+                       murND.setPos( i*32*2, j*32*2)
+                   elif element.sorte == 2:
+                       murD = QGraphicsPixmapItem(self.murD)
+                       self.addItem(murD)
+                       murD.setPos(i*32*2,j*32*2)
 
+
+        def refreshScene(self):
+            for i,line in enumerate(self.controller.carte.matrice):
+               for j,element in enumerate(line):
+                   if element.sorte == 1:
+                       murND = QGraphicsPixmapItem(self.murND)
+                       self.addItem(murND)
+                       murND.setPos( i*32*2, j*32*2)
+                   elif element.sorte == 2:
+                       if element.health < 50:
+                           murD = QGraphicsPixmapItem(self.murDAbime)
+                           if element.health == 0:
+                                element.sorte == 0                        
+                       else:
+                           murD = QGraphicsPixmapItem(self.murD)
+                       self.addItem(murD)
+                       murD.setPos(i*32*2,j*32*2)
+
+                   if element.sorte == 0:
+                       sol = QGraphicsPixmapItem(self.sol)
+                       self.addItem(sol)
+                       sol.setPos( i*32*2, j*32*2)
+
+        def initPersonnageBombe(self):
+            colorP1 = self.controller.getAvatar(1)
+            colorP2 = self.controller.getAvatar(2)
+            self.AvatarP1 = QGraphicsPixmapItem(QPixmap('../perso/'+colorP1+'Front.png'))
+            self.AvatarP2 = QGraphicsPixmapItem(QPixmap('../perso/'+colorP2+'Front.png'))
+            self.addItem(self.AvatarP1)
+            self.addItem(self.AvatarP2)
+            PositionJoueur = self.controller.getPosPlayer()
+            PJ1 = PositionJoueur[0]
+            PJ2 = PositionJoueur[1]
+            self.AvatarP1.setPos(PJ1[0]*64,PJ1[1]*64)
+            self.AvatarP2.setPos(PJ2[0]*64,PJ2[1]*64)
+            self.BombeP1 = self.controller.getBombe(1)
+            self.BombeP2 = self.controller.getBombe(2)
+        
+        def refreshPersonnage(self):
+            PositionJoueur = self.controller.getPosPlayer()
+            colorP1 = self.controller.getAvatar(1)
+            colorP2 = self.controller.getAvatar(2)
+            print(PositionJoueur)
+            PJ1 = PositionJoueur[0]
+            PJ2 = PositionJoueur[1]
+            self.removeItem(self.AvatarP1)
+            self.removeItem(self.AvatarP2)
+            self.AvatarP1 = QGraphicsPixmapItem(QPixmap(self.controller.AvatarP1))
+            self.AvatarP2 = QGraphicsPixmapItem(QPixmap(self.controller.AvatarP2))
+            self.AvatarP1.setPos(PJ1[0]*64,PJ1[1]*64)
+            self.addItem(self.AvatarP1)
+            self.AvatarP2.setPos(PJ2[0]*64,PJ2[1]*64) 
+            self.addItem(self.AvatarP2)
+
+        def refreshBombe(self):
+            pass
+ #           bombeP1 = QGraphicsPixmapItem(QPixmap(())
+
+        def refresh(self):
+            self.refreshScene()
+            self.refreshPersonnage()
+            self.refreshBombe()
 
 def main():
     app = QApplication(sys.argv)
     controller = ControllerGui()
     timer = QTimer()
-    fenetre = MainWindow(controller, timer)
+    fenetre = MainWindow(controller)
     music = Multimedia(controller)
-
-#    music.playGeneralSound()
-    timer.timeout.connect(controller.refresh)
-    timer.timeout.connect(music.refresh)
-#    timer.timeout.connect(fenetre.refresh)
-
-
-
+ #   music.playGeneralSound()
+ #   timer.timeout.connect(music.refresh)
+    timer.timeout.connect(fenetre.refresh)
+    timer.start(1000)
+ 
     ##        palette = QPalette()
     ##        palette.setBrush(QPalette.Background,QBrush(QPixmap("../image/bomberman_explosion.png")))
     ##        fenetre.setPalette(palette)

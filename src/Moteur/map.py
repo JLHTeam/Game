@@ -1,6 +1,7 @@
 import sys
 from case import *
 import csv
+import copy
 
 class Carte:
     """                   """
@@ -28,7 +29,7 @@ class Carte:
 
 
     def saveMap(self):
-        matrix = [row.copy() for row in self.matrice]
+        matrix = [copy.copy(row) for row in self.matrice]
         for i,line in enumerate(self.matrice):
             for j,element in enumerate(line):
                 matrix[i][j] = element.sorte
@@ -37,7 +38,7 @@ class Carte:
 
 
 def testCarte():
-    _carte = Carte('../Maps/map1.map')
+    _carte = Carte('../Maps/map2.map')
     _carte.loadMap()
     print(_carte.matrice[1][1].sorte)
 

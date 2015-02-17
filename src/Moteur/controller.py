@@ -1,17 +1,17 @@
-try:
-    # Qt5
-    from PyQt5.QtCore import *
-    from PyQt5.QtGui import *
-    from PyQt5.QtWidgets import *
-    from PyQt5.QtMultimedia import *
-except ImportError:
-    try:
+##try:
+##    # Qt5
+##    from PyQt5.QtCore import *
+##    from PyQt5.QtGui import *
+##    from PyQt5.QtWidgets import *
+##    from PyQt5.QtMultimedia import *
+##except ImportError:
+##    try:
         # Qt4
-        from PyQt4.QtCore import *
-        from PyQt4.QtGui import *
-    except ImportError:
-        print('Merci d\'installer PyQt5 ou PyQt4.')
-        exit()
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+##    except ImportError:
+##        print('Merci d\'installer PyQt5 ou PyQt4.')
+##        exit()
 
 from moteur import *
 from Multimedia import *
@@ -36,6 +36,7 @@ class ControllerBase:
     def avertir(self):
         for client in self.clients:
             client.refresh()
+            print('ok2')
 
     def info(self):
         return self.message
@@ -79,30 +80,58 @@ class ControllerGui(ControllerBase):
     def setModeGame(self, modeGame):
         self.modeGame = modeGame
 
-    def getAvatar(self):
-        return self.fileNameAvatar
+    def getAvatar(self, numPlayer):
+        return self.fileNameAvatar[numPlayer-1]
+
+    def getBombe(self, numPlayer):
+        return self.bombePlayer[numPlayer-1]
+
+    def getMap(self):
+         self.carte = Carte(self.fileNameMap)
+         self.carte.loadMap()
+         self.carte.saveMap()
+         self.carte.refresh()
+         self.dim = self.carte.dim[1]
+         self.sol = self.fileNameMap+'sol.png'
+         self.murND = self.fileNameMap+'murND.png'
+         self.murD = self.fileNameMap+'murD.png'
+         self.murDAbime = self.fileNameMap+'murDAbime.png'
+
 
     def setAction(self, commande):
+        colorP1 = self.getAvatar(1)
+        colorP2 = self.getAvatar(2)
+
         if commande == Qt.Key_Z:
             self.game.setAction("H",1)
+            print('ok')
+            self.AvatarP2 = '../perso/'+colorP2+'Back.png'
         if commande == Qt.Key_Up:
             self.game.setAction("H",0)
+            self.AvatarP1 = '../perso/'+colorP1+'Back.png'
         if commande == Qt.Key_Q:
             self.game.setAction("G",1)
+            self.AvatarP2 = '../perso/'+colorP2+'Left.png'
         if commande == Qt.Key_Left:
             self.game.setAction("G",0)
+            self.AvatarP1 = '../perso/'+colorP1+'Left.png'
         if commande == Qt.Key_S:
             self.game.setAction("B",1)
+            self.AvatarP2 = '../perso/'+colorP2+'Front.png'
         if commande == Qt.Key_Down:
             self.game.setAction("B",0)
+            self.AvatarP1 = '../perso/'+colorP1+'Front.png'
         if commande == Qt.Key_D:
             self.game.setAction("D",1)
+            self.AvatarP2 = '../perso/'+colorP2+'Right.png'
         if commande == Qt.Key_Right:
             self.game.setAction("D",0)
+            self.AvatarP1 = '../perso/'+colorP1+'Right.png'
         if commande == Qt.Key_Enter:
             self.game.setAction("BB",1)
         if commande == Qt.Key_Space:
             self.game.setAction("BB",0)
+
 
     def getPosPlayer(self):
         return [ posPlayer.position for posPlayer in self.game.playerList ]
